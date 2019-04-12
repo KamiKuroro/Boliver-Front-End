@@ -1,13 +1,15 @@
 .order-history{
-    width : 60%;
+    width : 40%;
     margin-left:auto;
     margin-right:auto;
     margin-bottom: 18px;
 }
+
 .ant-list-item.ant-list-item-no-flex {
-    width: 1000px;
-    padding-left: 20%;
+    width: 100%;
+    /* margin: auto; */
 }
+
 .order-id{
     margin-left: -40px;
     text-align: center;

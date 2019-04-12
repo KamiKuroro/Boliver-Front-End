@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin, List, Avatar, Empty, Collapse } from 'antd';
+import { Spin, List, Avatar, Empty, Collapse, Icon } from 'antd';
 
 export class OrderHistory extends React.Component {
 
@@ -36,9 +36,15 @@ export class OrderHistory extends React.Component {
                             >
                                 <List.Item.Meta
                                     avatar={<Avatar src={require("../assets/images/imagebox.png")} alt="imagebox" />}
-                                    title={<div className="order-id">Order ID:  {item.order_id}</div>}
+                                    title={<div className="order-id">
+                                        {
+                                            item.orderStatus === '3' ?
+                                                <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" /> :
+                                                <Icon type="close-circle" theme="twoTone" twoToneColor="#eb2f96" />
+                                        }
+                                        &nbsp; Order ID:  {item.order_id}</div>}
                                     description={
-                                        <div>
+                                        <div className="history-form">
                                             <div className="form-entry">
                                                 <div className='form-entry-left'>Ship From: </div>
                                                 <div className='form-entry-middle'>Name: <br /> Address:  </div>

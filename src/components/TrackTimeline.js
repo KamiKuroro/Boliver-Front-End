@@ -30,7 +30,10 @@ export class TrackTimeline extends React.Component {
                             Your package has been delivered at {this.state.time}<br />
                             Please hit "Confirm Order" button to complete your order.
                         </p>
-                        <Progress percent={100} successPercent={100} />
+                        <Progress
+                            percent={100}
+                            status="success"
+                        />
                     </Tooltip>
                 </div>
             )
@@ -42,7 +45,10 @@ export class TrackTimeline extends React.Component {
                             Your package is on the way.<br />
                             It is estimated to be delivered at {e_arrival}.
                         </p>
-                        <Progress percent={100} successPercent={66} />
+                        <Progress
+                            percent={66}
+                            status="active"
+                        />
 
                     </Tooltip>
                 </div>
@@ -56,7 +62,10 @@ export class TrackTimeline extends React.Component {
                             Your package is estimated to be delivered at {e_arrival}.
                         </p>
 
-                        <Progress percent={100} successPercent={33} />
+                        <Progress
+                            percent={33}
+                            status="active"
+                        />
                     </Tooltip>
 
                 </div>
