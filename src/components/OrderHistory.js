@@ -1,62 +1,22 @@
 import React from 'react';
 import { Spin, List, Avatar, Empty, Collapse } from 'antd';
-import { Footer } from './Footer';
-import { TOKEN_KEY, API_ROOT, AUTH_HEADER } from '../constants.js';
 
 export class OrderHistory extends React.Component {
-    state = {
-        error: '',
-        isLoadingOrders: true,
-        orders: [],
-    }
 
     componentDidMount() {
-        this.loadOrderHistory();
+        this.props.loadOrderHistory();
+        // console.log(this.props.state);
     }
-
-    loadOrderHistory = () => {
-        const token = localStorage.getItem(TOKEN_KEY);
-        // Fire API call
-        fetch(`${API_ROOT}/orderhistory`, {
-            method: "GET",
-            headers: {
-                Authorization: `${AUTH_HEADER} ${token}`
-            }
-        })
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error("Fail to load posts.");
-            })
-            .then((data) => {
-                this.setState({
-                    isLoadingOrders: false,
-                    orders: data ? data : [],
-                })
-                console.log(this.state.orders);
-            })
-            .catch((e) => {
-                this.setState({
-                    isLoadingOrders: false,
-                    error: e.message,
-                })
-            })
-    }
-
-    // convertTime = (time) => {
-    //     return time.slice(0, 4) + '/' + time.slice(4, 6) + '/' + time.slice(6, 8) + ' ' + time.slice(8, 10) + ':' + time.slice(10, 12) + ':' + time.slice(12, 14)
-    // }
 
     getHistoryOrders = () => {
-        const { error, orders, isLoadingOrders } = this.state;
+        const { error, historyOrders, isLoadingOrders } = this.props.state;
         const Panel = Collapse.Panel;
 
         if (error) {
             return error;
         } else if (isLoadingOrders) {
             return <Spin tip="Loading history order ... " />;
-        } else if (orders && orders.length > 0) {
+        } else if (historyOrders && historyOrders.length > 0) {
             return (
                 <div className="order-history">
                     <List className="list"
@@ -68,7 +28,7 @@ export class OrderHistory extends React.Component {
                             },
                             pageSize: 2,
                         }}
-                        dataSource={orders}
+                        dataSource={historyOrders}
                         renderItem={item => (
                             <List.Item
                                 key={item.order_id}
@@ -103,13 +63,13 @@ export class OrderHistory extends React.Component {
                                         <div className="form-entry">
                                             <div className='form-entry-left'>Order Status:</div>
                                             {
-                                                item.orderStatus === '0' ? 
-                                                (<div className='form-entry-right'>Completed</div>) : 
-                                                (<div className='form-entry-right'>Canceled</div>)
+                                                item.orderStatus === '3' ?
+                                                    (<div className='form-entry-right'>Completed</div>) :
+                                                    (<div className='form-entry-right'>Canceled</div>)
                                             }
                                         </div>
                                         <div className="form-entry">
-                                            {item.orderStatus === '0' ?
+                                            {item.orderStatus === '3' ?
                                                 (<div className='form-entry-left'>Completed Time: </div>) :
                                                 (<div className='form-entry-left'>Canceled Time: </div>)}
                                             <div className='form-entry-right'>{item.a_arrival}</div>
@@ -139,7 +99,6 @@ export class OrderHistory extends React.Component {
         return (
             <div>
                 {this.getHistoryOrders()}
-                <Footer className="footer"/>
             </div>
         )
     }

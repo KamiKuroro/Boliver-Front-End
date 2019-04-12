@@ -1,96 +1,25 @@
 import React from 'react';
 import { List, Avatar, Spin } from 'antd';
-import { TOKEN_KEY, AUTH_HEADER, API_ROOT } from '../constants';
 import { TrackButton } from './TrackButton';
-import { Footer } from './Footer';
 import { CancelButton } from './CancelButton';
 
 export class Track extends React.Component {
-    state = {
-        error: '',
-        isLoadingCurrentOrders: true,
-        currentorders: [],
-        orderHistoryData: []
-    }
 
     componentDidMount() {
-        this.loadCurrentOrders();
+        this.props.loadCurrentOrders();
+        console.log(this.props.state);
     }
-
-    loadOrderHistory = () => {
-        const token = localStorage.getItem(TOKEN_KEY);
-        // Fire API call
-        fetch(`${API_ROOT}/orderhistory`, {
-            method: "GET",
-            headers: {
-                Authorization: `${AUTH_HEADER} ${token}`
-            }
-        })
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error("Fail to load posts.");
-            })
-            .then((data) => {
-                this.setState({
-                    isLoadingOrders: false,
-                    orderHistoryData: data ? data : [],
-                })
-                console.log(this.state.orders);
-            })
-            .catch((e) => {
-                this.setState({
-                    isLoadingOrders: false,
-                    error: e.message,
-                })
-            })
-    }
-    
-    loadCurrentOrders = () => {
-            
-            const token = localStorage.getItem(TOKEN_KEY);
-            // Fire API call
-            fetch(`${API_ROOT}/currentorder`, {
-                method: "GET",
-                headers: {
-                    Authorization: `${AUTH_HEADER} ${token}`
-                }
-            })
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error("Fail to load current orders.");
-            })
-            .then((data) => {
-                this.setState({
-                    isLoadingCurrentOrders: false,
-                    currentorders: data ? data : [],
-                })
-                console.log(this.state.currentorders);
-            })
-            .catch((e) => {
-                this.setState({
-                    isLoadingCurrentOrders: false,
-                    error: e.message,
-                })
-                console.log(e);
-            })
-        
-    }
-
 
     getCurrentOrders = () => {
-        const { error, currentorders, isLoadingCurrentOrders  } = this.state;
+        const { error, currentOrders, isLoadingCurrentOrders } = this.props.state;
 
         if (error) {
             return error;
         } else if (isLoadingCurrentOrders) {
             return <Spin tip="Loading current orders ... " />;
-        } else if (currentorders && currentorders.length > 0) {
+        } else if (currentOrders && currentOrders.length > 0) {
             return (
-                 <div className="track" >
+                <div className="track" >
                     <List className="list"
                         itemLayout="horizontal"
                         pagination={{
@@ -99,27 +28,27 @@ export class Track extends React.Component {
                             },
                             pageSize: 3,
                         }}
-                        dataSource={currentorders}
+                        dataSource={currentOrders}
                         renderItem={item => (
                             <List.Item>
                                 <List.Item.Meta
-                                avatar={<Avatar src={require("../assets/images/imagebox.png")} alt="imagebox" />}
-                                title={<div className="text1">Order ID:  {item.order_id}</div>}
-                                description={
-                                    <div>
-                                        {/* {item.orderStatus == 0 ? "Delivered" : "On the way" } */}
-                                        <b>Ship from: </b>{item.sender} <br />
-                                        <b className="spacer1"></b>{item.origin} <br />
-                                        <b>Ship to: </b> &nbsp; &nbsp; &nbsp;{item.receiver} <br /> 
-                                        <b className="spacer2"></b>{item.destination} <br />
-                                        <b>Created at: </b>{item.create_time} <br /> 
-                                    </div> 
-                                }
+                                    avatar={<Avatar src={require("../assets/images/imagebox.png")} alt="imagebox" />}
+                                    title={<div className="text1">Order ID:  {item.order_id}</div>}
+                                    description={
+                                        <div>
+                                            {/* {item.orderStatus == 0 ? "Delivered" : "On the way" } */}
+                                            <b>Ship from: </b>{item.sender} <br />
+                                            <b className="spacer1"></b>{item.origin} <br />
+                                            <b>Ship to: </b> &nbsp; &nbsp; &nbsp;{item.receiver} <br />
+                                            <b className="spacer2"></b>{item.destination} <br />
+                                            <b>Created at: </b>{item.create_time} <br />
+                                        </div>
+                                    }
                                 />
-                                <TrackButton currentorder={item} loadCurrentOrders={this.loadCurrentOrders} loadOrderHistory={this.loadOrderHistory}/>
-                                <CancelButton currentorder={item} loadCurrentOrders={this.loadCurrentOrders} loadOrderHistory={this.loadOrderHistory}/>
-                            </List.Item>    
-                        )} 
+                                <TrackButton currentOrder={item} loadCurrentOrders={this.props.loadCurrentOrders} loadOrderHistory={this.props.loadOrderHistory} />
+                                <CancelButton currentOrder={item} loadCurrentOrders={this.props.loadCurrentOrders} loadOrderHistory={this.props.loadOrderHistory} />
+                            </List.Item>
+                        )}
                     />
                 </div>
             )
@@ -129,12 +58,33 @@ export class Track extends React.Component {
     }
 
     render() {
-       
         return (
             <div>
                 <div>{this.getCurrentOrders()}</div>
-                <div className="TrackFooter"><Footer className="footer"/></div>
+                <div className="TrackFooter"></div>
             </div>
         )
     }
 }
+
+
+
+
+
+/** 乔先森
+import { API_ROOT } from "../constants";
+import { getData, postData } from "./Fetch.js";
+
+export function fetchCurrentOrderList() {
+    let url = API_ROOT + "/currentOrder";
+    return getData(url);
+}
+export function fetchTrackOrder(orderId) {
+    let url = API_ROOT + "/trackorder";
+    let data = { order_id: orderId }
+    return postData(url, data).then(res => console.log(res));
+
+}
+*/
+
+

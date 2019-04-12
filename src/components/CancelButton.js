@@ -14,7 +14,7 @@ export class CancelButton extends React.Component {
         this.setState({
             visible: true,
         });
-        console.log(this.props.currentorder.order_id);
+        console.log(this.props.currentOrder.order_id);
     }
 
     handleClose = () => {
@@ -26,7 +26,7 @@ export class CancelButton extends React.Component {
     }
 
     handleYes = () => {
-        const order_id  = this.props.currentorder.order_id; //只取一个元素，就不加{}
+        const order_id  = this.props.currentOrder.order_id; //只取一个元素，就不加{}
         console.log(order_id);
 
         this.setState({ visible: false });
@@ -71,11 +71,11 @@ export class CancelButton extends React.Component {
                 Cancel
             </Button>
 
-            {this.props.currentorder.orderStatus === '2'  ? 
+            {this.props.currentOrder.orderStatus === '2'  ? 
             
             <Modal 
                 visible={visible}
-                title={<div><b>Order Id: </b> {this.props.currentorder.order_id}</div>}
+                title={<div><b>Order Id: </b> {this.props.currentOrder.order_id}</div>}
                 onCancel={this.handleClose}
                 footer={[
                     <Button key="no" onClick={this.handleNo} >No</Button>,
@@ -87,7 +87,7 @@ export class CancelButton extends React.Component {
             
             <Modal 
                 visible={visible}
-                title={<div><b>Order Id: </b> {this.props.currentorder.order_id}</div>} 
+                title={<div><b>Order Id: </b> {this.props.currentOrder.order_id}</div>} 
                 onCancel={this.handleClose}
                 
                 footer={[

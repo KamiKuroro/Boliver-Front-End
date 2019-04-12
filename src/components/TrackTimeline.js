@@ -15,14 +15,14 @@ export class TrackTimeline extends React.Component {
         const time = new Date().toLocaleString();
         this.setState({
             time: time
-        }) 
+        })
     }
 
     getTimeline = () => {
-        const { orderStatus, e_arrival } = this.props.currentorder;
+        const { orderStatus, e_arrival } = this.props.currentOrder;
         console.log(orderStatus);
 
-        if (orderStatus === '0') { 
+        if (orderStatus === '0') {
             return (
                 <div>
                     <Tooltip title="Delivered">
@@ -43,7 +43,7 @@ export class TrackTimeline extends React.Component {
                             It is estimated to be delivered at {e_arrival}.
                         </p>
                         <Progress percent={100} successPercent={66} />
-                        
+
                     </Tooltip>
                 </div>
             )
@@ -55,18 +55,18 @@ export class TrackTimeline extends React.Component {
                             Robot is on its way to pick up your package. <br />
                             Your package is estimated to be delivered at {e_arrival}.
                         </p>
-                        
+
                         <Progress percent={100} successPercent={33} />
                     </Tooltip>
 
                 </div>
-                
+
             )
         } else {
-                return (<p>Your order has been canceled or successfully delivered. Please check your order in orderHistory.</p>)
+            return (<p>Your order has been canceled or successfully delivered. Please check your order in orderHistory.</p>)
         }
     }
-    
+
     render() {
         return (
             <div>{this.getTimeline()}</div>

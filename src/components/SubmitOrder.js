@@ -117,6 +117,7 @@ export class SubmitOrder extends React.Component{
                 })
                 this.form.resetFields();
                 message.success("your order has been successfully placed!")
+                this.props.loadCurrentOrders();
                 console.log(data)
             })
             .catch((e) => {
